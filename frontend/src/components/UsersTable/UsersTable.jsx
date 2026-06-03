@@ -11,13 +11,6 @@ function UsersTable({ users, onSuccessfulUserDeletion }) {
   return (
     <div>
       <table className="users-table">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>First name</th>
-            <th>Last name</th>
-          </tr>
-        </thead>
         <tbody>
           {users.map((user) => (
             <tr key={user.email}>
