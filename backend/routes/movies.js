@@ -1,7 +1,6 @@
 import express from 'express';
 import { appDataSource } from '../datasource.js';
 import Movie from '../entities/movies.js';
-import { useFetchMovies } from '../frontend/src/pages/Home/useFetchMovies';
 
 const router = express.Router();
 
@@ -55,13 +54,5 @@ router.delete('/delete/:id', function (req, res) {
       res.status(500).json({ message: 'Error while deleting the user' });
     });
 });
-
-function ajoutfilm (movie){
-const { movies, moviesLoadingError, fetchMovies } = useFetchMovies();
-
-}
-
-const listItems = movies.results?.map((m) => );
-  
 
 export default router;
