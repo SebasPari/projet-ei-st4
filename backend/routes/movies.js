@@ -41,14 +41,21 @@ router.post('/new', function (req, res) {
 });
 
 router.get('/:id', (req, res) => {
+  const movieId = Number(req.params.id);
+
+  if (Number.isNaN(movieId)) {
+    res.status(400).json({ message: 'Invalid movie id' });
+    return;
+  }
+
   appDataSource
     .getRepository(Movie)
-    .findOneBy({ id: req.params.id })
+    .findOneBy({ id: movieId })
     .then(function (movie) {
       if (movie == null) {
         res.status(404).json({ message: 'Movie not found' });
       } else {
-        res.status(200).json({ message: movie.title });
+        res.status(200).json({ movie: movie });
         console.log('movie found');
       }
     })

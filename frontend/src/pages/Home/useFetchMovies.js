@@ -10,11 +10,10 @@ export function useFetchMovies() {
 
     axios
       .get(
-        `http://localhost:8000/movies?page=${page}&limit=100&sort=${sort}&order=${order}`
+        `${import.meta.env.VITE_BACKEND_URL}/movies?page=${page}&limit=100&sort=${sort}&order=${order}`
       )
       .then((response) => {
         setMovies(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         setUsersLoadingError('An error occured while fetching movies.');
