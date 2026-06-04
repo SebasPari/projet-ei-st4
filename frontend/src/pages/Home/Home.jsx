@@ -49,7 +49,11 @@ function Home() {
     return 0;
   });
 
-  const listItems = sortedMovies?.map((m) => <Movie movie={m}></Movie>);
+  const filteredMovies = sortedMovies?.filter((film) => {
+    return film.title.toLowerCase().includes(movieName.toLowerCase());
+  });
+
+  const listItems = filteredMovies?.map((m) => <Movie movie={m}></Movie>);
 
   return (
     <div className="App">
