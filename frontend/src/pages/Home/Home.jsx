@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import logo from './logo.svg';
 import './Home.css';
 import { useFetchMovies } from './useFetchMovies';
 import { Movie } from '../../components/Movie/Movie';
@@ -91,9 +90,13 @@ function Home() {
   }
 
   if (lastPage < totalPages) {
-    pages.push(<button key="dots" disabled>...</button>);
     pages.push(
-      <button key="last-page" disabled>
+      <button className="pagination-info" key="dots" disabled>
+        ...
+      </button>
+    );
+    pages.push(
+      <button className="pagination-info" key="last-page" disabled>
         {totalPages}
       </button>
     );
@@ -113,10 +116,14 @@ function Home() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <main className="Home-page">
         <h1>Filmorama</h1>
         <div className="search-bar">
-          <input value={movieName} onChange={handleChange} />
+          <input
+            value={movieName}
+            onChange={handleChange}
+            placeholder="Rechercher un film"
+          />
           <select value={sortType} onChange={handleSortChange}>
             <option value="">Trier par</option>
             <option value="title">Titre</option>
@@ -130,23 +137,11 @@ function Home() {
             </button>
           )}
         </div>
-        <p>{movieName}</p>
-        {moviesLoadingError && <p>{moviesLoadingError}</p>}
-        {listItems}
+
+        {moviesLoadingError && <p className="error-message">{moviesLoadingError}</p>}
+        <section className="movies-grid">{listItems}</section>
         <div className="pagination">{pages}</div>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://react.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </main>
     </div>
   );
 }
