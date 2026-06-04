@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './Home.css';
 import { useFetchMovies } from './useFetchMovies';
 import { Movie } from '../../components/Movie/Movie';
+import { Pagination } from '../../components/Pagination/Pagination';
 
 function Home() {
   const [movieName, setMovieName] = useState('');
@@ -23,7 +24,10 @@ function Home() {
       return 'DESC';
     }
 
-    if (selectedSortType === 'vote_average' || selectedSortType === 'vote_count') {
+    if (
+      selectedSortType === 'vote_average' ||
+      selectedSortType === 'vote_count'
+    ) {
       return 'DESC';
     }
 
@@ -60,61 +64,14 @@ function Home() {
     fetchMovies(page, sort, order);
   }
 
-  const listItems = movies.movies?.map((m) => <Movie key={m.id} movie={m}></Movie>);
-  const pages = [];
-  const totalPages = movies.totalPages || 0;
-  const firstPage = Math.max(currentPage - 2, 1);
-  const lastPage = Math.min(currentPage + 2, totalPages);
-
-  if (totalPages > 0) {
-    pages.push(
-      <button
-        key="previous"
-        onClick={() => handlePageClick(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        &lt;
-      </button>
-    );
-  }
-
-  for (let i = firstPage; i <= lastPage; i++) {
-    pages.push(
-      <button
-        key={i}
-        onClick={() => handlePageClick(i)}
-        disabled={i === currentPage}
-      >
-        {i}
-      </button>
-    );
-  }
-
-  if (lastPage < totalPages) {
-    pages.push(<button key="dots" disabled>...</button>);
-    pages.push(
-      <button key="last-page" disabled>
-        {totalPages}
-      </button>
-    );
-  }
-
-  const filteredMovies = sortedMovies?.filter((film) => {
+  const filteredMovies = movies.movies?.filter((film) => {
     return film.title.toLowerCase().includes(movieName.toLowerCase());
   });
 
-  const listItems = filteredMovies?.map((m) => <Movie movie={m}></Movie>);
-  if (totalPages > 0) {
-    pages.push(
-      <button
-        key="next"
-        onClick={() => handlePageClick(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        &gt;
-      </button>
-    );
-  }
+  // On crée la liste des films à afficher
+  const listItems = filteredMovies?.map((movie) => (
+    <Movie key={movie.id} movie={movie}></Movie>
+  ));
 
   return (
     <div className="App">
@@ -138,7 +95,11 @@ function Home() {
         <p>{movieName}</p>
         {moviesLoadingError && <p>{moviesLoadingError}</p>}
         {listItems}
-        <div className="pagination">{pages}</div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={movies.totalPages || 0}
+          onPageClick={handlePageClick}
+        />
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.jsx</code> and save to reload.
