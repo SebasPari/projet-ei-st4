@@ -1,15 +1,34 @@
 import express from 'express';
 import { appDataSource } from '../datasource.js';
 import Movie from '../entities/movies.js';
-import { useFetchMovies } from '../frontend/src/pages/Home/useFetchMovies';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   const movieRepository = appDataSource.getRepository(Movie);
-  const allMovies = await movieRepository.find();
-  console.log(allMovies);
-  res.json({ allMovies });
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 100;
+  const skip = (page - 1) * limit;
+  const sort = req.query.sort || 'id';
+  const order = req.query.order || 'ASC';
+  const sortColumns = ['id', 'title', 'release_date', 'vote_average', 'vote_count'];
+  const sortColumn = sortColumns.includes(sort) ? sort : 'id';
+  const sortOrder = order === 'DESC' ? 'DESC' : 'ASC';
+
+  const [movies, totalMovies] = await movieRepository.findAndCount({
+    skip: skip,
+    take: limit,
+    order: {
+      [sortColumn]: sortOrder,
+    },
+  });
+
+  res.json({
+    movies: movies,
+    totalMovies: totalMovies,
+    totalPages: Math.ceil(totalMovies / limit),
+    currentPage: page,
+  });
 });
 
 router.post('/new', function (req, res) {
@@ -55,13 +74,5 @@ router.delete('/delete/:id', function (req, res) {
       res.status(500).json({ message: 'Error while deleting the user' });
     });
 });
-
-function ajoutfilm (movie){
-const { movies, moviesLoadingError, fetchMovies } = useFetchMovies();
-
-}
-
-const listItems = movies.results?.map((m) => );
-  
 
 export default router;
