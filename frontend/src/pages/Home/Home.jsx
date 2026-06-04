@@ -8,52 +8,113 @@ function Home() {
   const [movieName, setMovieName] = useState('');
   const [sortType, setSortType] = useState('');
   const [dateOrder, setDateOrder] = useState('recent');
+  const [currentPage, setCurrentPage] = useState(1);
   const { movies, moviesLoadingError, fetchMovies } = useFetchMovies();
   function handleChange(e) {
     setMovieName(e.target.value);
   }
 
+  function getSortOrder(selectedSortType, selectedDateOrder) {
+    if (selectedSortType === 'release_date') {
+      if (selectedDateOrder === 'old') {
+        return 'ASC';
+      }
+
+      return 'DESC';
+    }
+
+    if (selectedSortType === 'vote_average' || selectedSortType === 'vote_count') {
+      return 'DESC';
+    }
+
+    return 'ASC';
+  }
+
   function handleSortChange(e) {
-    setSortType(e.target.value);
+    const newSortType = e.target.value;
+    const sort = newSortType || 'id';
+    const order = getSortOrder(newSortType, dateOrder);
+
+    setSortType(newSortType);
+    setCurrentPage(1);
+    fetchMovies(1, sort, order);
   }
 
   function handleDateOrderClick() {
+    let newDateOrder = 'recent';
+
     if (dateOrder === 'recent') {
-      setDateOrder('old');
-    } else {
-      setDateOrder('recent');
+      newDateOrder = 'old';
     }
+
+    setDateOrder(newDateOrder);
+    setCurrentPage(1);
+    fetchMovies(1, 'release_date', getSortOrder('release_date', newDateOrder));
   }
 
-  const sortedMovies = movies.results?.sort((movieA, movieB) => {
-    if (sortType === 'title') {
-      return movieA.title.localeCompare(movieB.title);
-    }
+  function handlePageClick(page) {
+    const sort = sortType || 'id';
+    const order = getSortOrder(sortType, dateOrder);
 
-    if (sortType === 'release_date') {
-      if (dateOrder === 'old') {
-        return movieA.release_date.localeCompare(movieB.release_date);
-      }
+    setCurrentPage(page);
+    fetchMovies(page, sort, order);
+  }
 
-      return movieB.release_date.localeCompare(movieA.release_date);
-    }
+  const listItems = movies.movies?.map((m) => <Movie key={m.id} movie={m}></Movie>);
+  const pages = [];
+  const totalPages = movies.totalPages || 0;
+  const firstPage = Math.max(currentPage - 2, 1);
+  const lastPage = Math.min(currentPage + 2, totalPages);
 
-    if (sortType === 'vote_average') {
-      return movieB.vote_average - movieA.vote_average;
-    }
+  if (totalPages > 0) {
+    pages.push(
+      <button
+        key="previous"
+        onClick={() => handlePageClick(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        &lt;
+      </button>
+    );
+  }
 
-    if (sortType === 'vote_count') {
-      return movieB.vote_count - movieA.vote_count;
-    }
+  for (let i = firstPage; i <= lastPage; i++) {
+    pages.push(
+      <button
+        key={i}
+        onClick={() => handlePageClick(i)}
+        disabled={i === currentPage}
+      >
+        {i}
+      </button>
+    );
+  }
 
-    return 0;
-  });
+  if (lastPage < totalPages) {
+    pages.push(<button key="dots" disabled>...</button>);
+    pages.push(
+      <button key="last-page" disabled>
+        {totalPages}
+      </button>
+    );
+  }
 
   const filteredMovies = sortedMovies?.filter((film) => {
     return film.title.toLowerCase().includes(movieName.toLowerCase());
   });
 
   const listItems = filteredMovies?.map((m) => <Movie movie={m}></Movie>);
+  if (totalPages > 0) {
+    pages.push(
+      <button
+        key="next"
+        onClick={() => handlePageClick(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        &gt;
+      </button>
+    );
+  }
 
   return (
     <div className="App">
@@ -75,7 +136,9 @@ function Home() {
           )}
         </div>
         <p>{movieName}</p>
+        {moviesLoadingError && <p>{moviesLoadingError}</p>}
         {listItems}
+        <div className="pagination">{pages}</div>
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.jsx</code> and save to reload.
