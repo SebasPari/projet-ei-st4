@@ -15,7 +15,15 @@ function Home() {
   const { users } = useFetchUsers();
 
   function handleChange(e) {
-    setMovieName(e.target.value);
+    const searchedMovie = e.target.value;
+    setMovieName(searchedMovie);
+    fetchMovies(
+      1,
+      sortType || 'id',
+      getSortOrder(sortType, dateOrder),
+      searchedMovie
+    );
+    setCurrentPage(1);
   }
 
   function getSortOrder(selectedSortType, selectedDateOrder) {
@@ -36,8 +44,8 @@ function Home() {
     return 'ASC';
   }
 
-  function handleSortChange(e) {
-    const newSortType = e.target.value;
+  function handleSortChange(event) {
+    const newSortType = event.target.value;
     const sort = newSortType || 'id';
     const order = getSortOrder(newSortType, dateOrder);
     setSortType(newSortType);
@@ -65,7 +73,6 @@ function Home() {
   const filteredMovies = movies.movies?.filter((film) => {
     return film.title.toLowerCase().includes(movieName.toLowerCase());
   });
-
   const listItems = filteredMovies?.map((movie) => (
     <Movie key={movie.id} movie={movie}></Movie>
   ));
