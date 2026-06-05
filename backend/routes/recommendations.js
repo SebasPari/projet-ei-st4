@@ -16,6 +16,7 @@ router.get('/:userId', async function (req, res) {
   }
 
   // On transforme les notes en un objet facile à lire : un dictinonnaire qui prend pour clé movieId et valeur le rating
+  // EX: {3:6, 11:6, 90:8}
   const myRatings = {};
   for (const r of myRatingsRaw) {
     myRatings[r.movieId] = r.rating;
@@ -25,6 +26,7 @@ router.get('/:userId', async function (req, res) {
   const allRatings = await ratingRepository.find();
 
   // On groupe les notes par utilisateur en créant un dictionnaire qui prend en clé userId et valeur son dictionnaire de ratings
+  // {userId : {movieId : rating}}
   const otherUsersRatings = {};
   for (const r of allRatings) {
     if (r.userId === userId) {
@@ -42,6 +44,7 @@ router.get('/:userId', async function (req, res) {
   const similarityScores = {};
 
   for (const otherUserId in otherUsersRatings) {
+    // On garde localement les ratings de l'user qu'on regarde actuellement
     const otherRatings = otherUsersRatings[otherUserId];
 
     // On trouve les films notés par les 2 utilisateurs
@@ -96,7 +99,7 @@ router.get('/:userId', async function (req, res) {
       similarityScores[otherUserId] = pearsonScore;
     }
   }
-  // Étape D — Trouver les films bien notés par les utilisateurs similaires
+  // Trouver les films bien notés par les utilisateurs similaires
   // qu'on n'a pas encore vu
   const myMovieIds = Object.keys(myRatings).map(Number);
   const recommendedMovieIds = {};
@@ -126,7 +129,7 @@ router.get('/:userId', async function (req, res) {
 
   // On trie les films par score de recommandation
   const sortedMovieIds = Object.keys(recommendedMovieIds)
-    .sort((a, b) => recommendedMovieIds[b] - recommendedMovieIds[a])
+    .sort((a, b) => recommendedMovieIds[b] - recommendedMovieIds[a]) // sort de plus grand au plus petit
     .slice(0, 10) // On garde les 10 meilleurs
     .map(Number);
 
@@ -134,7 +137,7 @@ router.get('/:userId', async function (req, res) {
     return res.json({ movies: [] });
   }
 
-  // Étape E — Récupérer les détails des films recommandés
+  // On récupére les détails des films recommandés
   const Movie = (await import('../entities/movies.js')).default;
   const movieRepository = appDataSource.getRepository(Movie);
   const recommendedMovies = await movieRepository.findByIds(sortedMovieIds);
