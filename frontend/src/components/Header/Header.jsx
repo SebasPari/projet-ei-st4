@@ -12,10 +12,6 @@ const Header = () => {
 
   return (
     <header className="Header-container">
-      <NavLink className="Header-brand" to="/">
-        MovieMatch
-      </NavLink>
-
       <nav className="Header-nav" aria-label="Navigation principale">
         <NavLink className={getLinkClassName} to="/">
           Accueil
@@ -25,12 +21,6 @@ const Header = () => {
         </NavLink>
         <NavLink className={getLinkClassName} to="/users">
           Utilisateurs
-        </NavLink>
-        <NavLink className={getLinkClassName} to="/counter">
-          Compteur
-        </NavLink>
-        <NavLink className={getLinkClassName} to="/about">
-          A propos
         </NavLink>
       </nav>
     </header>
