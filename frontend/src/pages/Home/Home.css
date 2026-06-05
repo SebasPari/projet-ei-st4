@@ -9,15 +9,109 @@
 }
 
 .Home-page h1 {
-  color: #111827;
+  color: #ffffff;
   font-size: 42px;
   margin: 10px 0 24px;
 }
 
+.user-selection-page {
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.user-selection-page h1 {
+  color: #ffffff;
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.user-selection-page p {
+  color: #b3b3b3;
+  font-size: 17px;
+}
+
+.user-list {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  margin-top: 28px;
+}
+
+.user-list button,
+.secondary-action,
+.primary-action {
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  min-height: 42px;
+  padding: 9px 14px;
+}
+
+.user-list button {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  color: #f5f5f5;
+  cursor: pointer;
+}
+
+.user-list button:hover {
+  border-color: #e50914;
+  color: #ffffff;
+}
+
+.home-user-panel {
+  align-items: center;
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: space-between;
+  margin: 0 auto 22px;
+  max-width: 760px;
+  padding: 14px;
+}
+
+.home-user-panel p {
+  color: #d1d5db;
+  margin: 0;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.primary-action {
+  align-items: center;
+  background: #e50914;
+  border: 1px solid #e50914;
+  color: #ffffff;
+  display: inline-flex;
+  text-decoration: none;
+}
+
+.secondary-action {
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  color: #f5f5f5;
+  cursor: pointer;
+}
+
+.primary-action:hover,
+.secondary-action:hover {
+  box-shadow: 0 8px 18px rgba(229, 9, 20, 0.18);
+}
+
 .search-bar {
   align-items: center;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: #181818;
+  border: 1px solid #2a2a2a;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   display: flex;
@@ -32,7 +126,7 @@
 .search-bar input,
 .search-bar select,
 .search-bar button {
-  border: 1px solid #d1d5db;
+  border: 1px solid #3a3a3a;
   border-radius: 8px;
   font-size: 15px;
   min-height: 42px;
@@ -40,11 +134,17 @@
 }
 
 .search-bar select {
-  background: #ffffff;
+  background: #101010;
+  color: #f5f5f5;
+}
+
+.search-bar input {
+  background: #101010;
+  color: #f5f5f5;
 }
 
 .search-bar button {
-  background: #0f766e;
+  background: #e50914;
   color: #ffffff;
   cursor: pointer;
   font-weight: 700;
@@ -72,25 +172,25 @@
 }
 
 .pagination button {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: #181818;
+  border: 1px solid #3a3a3a;
   border-radius: 8px;
-  color: #111827;
+  color: #f5f5f5;
   cursor: pointer;
   font-size: 16px;
   padding: 8px 12px;
 }
 
 .pagination button:disabled:not(.pagination-info) {
-  background: #0f766e;
-  border-color: #0f766e;
+  background: #e50914;
+  border-color: #e50914;
   color: #ffffff;
   cursor: default;
 }
 
 .pagination button.pagination-info {
-  background: #ffffff;
-  color: #6b7280;
+  background: #181818;
+  color: #9ca3af;
 }
 
 @media (max-width: 640px) {

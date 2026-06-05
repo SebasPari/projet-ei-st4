@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import './Home.css';
 import { useFetchMovies } from './useFetchMovies';
@@ -11,7 +12,8 @@ function Home() {
   const [dateOrder, setDateOrder] = useState('recent');
   const [currentPage, setCurrentPage] = useState(1);
   const { movies, moviesLoadingError, fetchMovies } = useFetchMovies();
-  const [selectedUser, setSelectedUser] = useState(null);
+  const savedUser = JSON.parse(localStorage.getItem('selectedUser'));
+  const [selectedUser, setSelectedUser] = useState(savedUser);
   const { users } = useFetchUsers();
 
   function handleChange(e) {
@@ -73,23 +75,23 @@ function Home() {
   // Si aucun utilisateur n'est choisi, on affiche la liste
   if (selectedUser === null) {
     return (
-      <div className="App">
+      <main className="user-selection-page">
         <h1>Qui êtes-vous ?</h1>
-        <ul>
+        <p>Choisis un utilisateur pour afficher les films et personnaliser les recommandations.</p>
+        <div className="user-list">
           {users.map((user) => (
-            <li key={user.id}>
-              <button
-                onClick={() => {
-                  setSelectedUser(user);
-                  localStorage.setItem('selectedUser', JSON.stringify(user));
-                }}
-              >
-                {user.firstname} {user.lastname}
-              </button>
-            </li>
+            <button
+              key={user.id}
+              onClick={() => {
+                setSelectedUser(user);
+                localStorage.setItem('selectedUser', JSON.stringify(user));
+              }}
+            >
+              {user.firstname} {user.lastname}
+            </button>
           ))}
-        </ul>
-      </div>
+        </div>
+      </main>
     );
   }
 
@@ -97,10 +99,26 @@ function Home() {
     <div className="App">
       <main className="Home-page">
         <h1>Filmorama</h1>
-        <p>
-          Connecté en tant que : {selectedUser.firstname}{' '}
-          {selectedUser.lastname}
-        </p>
+        <div className="home-user-panel">
+          <p>
+            Connecté en tant que : <strong>{selectedUser.firstname}{' '}
+            {selectedUser.lastname}</strong>
+          </p>
+          <div className="home-actions">
+            <Link className="primary-action" to="/recommendations">
+              Voir mes recommandations
+            </Link>
+            <button
+              className="secondary-action"
+              onClick={() => {
+                localStorage.removeItem('selectedUser');
+                setSelectedUser(null);
+              }}
+            >
+              Changer d'utilisateur
+            </button>
+          </div>
+        </div>
         <div className="search-bar">
           <input
             value={movieName}

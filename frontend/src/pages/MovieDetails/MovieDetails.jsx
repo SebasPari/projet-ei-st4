@@ -43,8 +43,13 @@ function MovieDetails() {
   }
 
   function handleRatingSubmit() {
+    if (rating === '') {
+      setRatingMessage('Choisis une note avant d’envoyer.');
+      return;
+    }
+
     axios
-      .post('http://localhost:8000/ratings/new', {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/ratings/new`, {
         userId: selectedUser.id,
         movieId: movie.id,
         rating: Number(rating),
@@ -84,22 +89,35 @@ function MovieDetails() {
           </div>
           <p>{movie.overview || 'Aucun résumé disponible.'}</p>
 
-          <div>
+          <div className="rating-panel">
             <h3>Donner une note à ce film</h3>
             <p>
               Connecté en tant que : {selectedUser.firstname}{' '}
               {selectedUser.lastname}
             </p>
-            <input
-              type="number"
-              min="1"
-              max="10"
-              value={rating}
-              onChange={(e) => setRating(e.target.value)}
-              placeholder="Note de 1 à 10"
-            />
-            <button onClick={handleRatingSubmit}>Envoyer</button>
-            {ratingMessage && <p>{ratingMessage}</p>}
+            <div className="rating-options">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((note) => (
+                <button
+                  className={Number(rating) === note ? 'selected-rating' : ''}
+                  key={note}
+                  onClick={() => setRating(String(note))}
+                  type="button"
+                >
+                  {note}
+                </button>
+              ))}
+            </div>
+            <button className="rating-submit" onClick={handleRatingSubmit}>
+              Enregistrer ma note
+            </button>
+            {ratingMessage && (
+              <p className="rating-message">
+                {ratingMessage}{' '}
+                {ratingMessage === 'Note sauvegardée !' && (
+                  <Link to="/recommendations">Voir mes recommandations</Link>
+                )}
+              </p>
+            )}
           </div>
         </div>
       </section>

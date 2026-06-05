@@ -1,9 +1,9 @@
 .movie-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: #181818;
+  border: 1px solid #2a2a2a;
   border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  color: #1f2937;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.38);
+  color: #f5f5f5;
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -13,13 +13,14 @@
 }
 
 .movie-card:hover {
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.14);
-  transform: translateY(-3px);
+  border-color: #e50914;
+  box-shadow: 0 18px 36px rgba(229, 9, 20, 0.2);
+  transform: translateY(-4px);
 }
 
 .movie-poster {
   aspect-ratio: 2 / 3;
-  background: #edf2f7;
+  background: #101010;
   object-fit: cover;
   width: 100%;
 }
@@ -34,22 +35,23 @@
 }
 
 .movie-info h2 {
+  color: #ffffff;
   font-size: 18px;
   line-height: 1.25;
   margin: 0;
 }
 
 .movie-info p {
-  color: #6b7280;
+  color: #b3b3b3;
   font-size: 14px;
   margin: 0;
 }
 
 .movie-info span {
   align-self: flex-start;
-  background: #e6f4f1;
+  background: #2a0b0e;
   border-radius: 999px;
-  color: #0f766e;
+  color: #ffb3b8;
   font-size: 13px;
   font-weight: 700;
   margin-top: auto;
