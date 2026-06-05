@@ -2,6 +2,8 @@ import { useState } from 'react';
 import './Home.css';
 import { useFetchMovies } from './useFetchMovies';
 import { Movie } from '../../components/Movie/Movie';
+import { Pagination } from '../../components/Pagination/Pagination';
+import { useFetchUsers } from '../Users/useFetchUsers';
 
 function Home() {
   const [movieName, setMovieName] = useState('');
@@ -9,6 +11,9 @@ function Home() {
   const [dateOrder, setDateOrder] = useState('recent');
   const [currentPage, setCurrentPage] = useState(1);
   const { movies, moviesLoadingError, fetchMovies } = useFetchMovies();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const { users } = useFetchUsers();
+
   function handleChange(e) {
     setMovieName(e.target.value);
   }
@@ -21,8 +26,10 @@ function Home() {
 
       return 'DESC';
     }
-
-    if (selectedSortType === 'vote_average' || selectedSortType === 'vote_count') {
+    if (
+      selectedSortType === 'vote_average' ||
+      selectedSortType === 'vote_count'
+    ) {
       return 'DESC';
     }
 
@@ -33,7 +40,6 @@ function Home() {
     const newSortType = e.target.value;
     const sort = newSortType || 'id';
     const order = getSortOrder(newSortType, dateOrder);
-
     setSortType(newSortType);
     setCurrentPage(1);
     fetchMovies(1, sort, order);
@@ -41,11 +47,9 @@ function Home() {
 
   function handleDateOrderClick() {
     let newDateOrder = 'recent';
-
     if (dateOrder === 'recent') {
       newDateOrder = 'old';
     }
-
     setDateOrder(newDateOrder);
     setCurrentPage(1);
     fetchMovies(1, 'release_date', getSortOrder('release_date', newDateOrder));
@@ -54,63 +58,38 @@ function Home() {
   function handlePageClick(page) {
     const sort = sortType || 'id';
     const order = getSortOrder(sortType, dateOrder);
-
     setCurrentPage(page);
     fetchMovies(page, sort, order);
   }
 
-  const listItems = movies.movies?.map((m) => <Movie key={m.id} movie={m}></Movie>);
-  const pages = [];
-  const totalPages = movies.totalPages || 0;
-  const firstPage = Math.max(currentPage - 2, 1);
-  const lastPage = Math.min(currentPage + 2, totalPages);
+  const filteredMovies = movies.movies?.filter((film) => {
+    return film.title.toLowerCase().includes(movieName.toLowerCase());
+  });
 
-  if (totalPages > 0) {
-    pages.push(
-      <button
-        key="previous"
-        onClick={() => handlePageClick(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        &lt;
-      </button>
-    );
-  }
+  const listItems = filteredMovies?.map((movie) => (
+    <Movie key={movie.id} movie={movie}></Movie>
+  ));
 
-  for (let i = firstPage; i <= lastPage; i++) {
-    pages.push(
-      <button
-        key={i}
-        onClick={() => handlePageClick(i)}
-        disabled={i === currentPage}
-      >
-        {i}
-      </button>
-    );
-  }
-
-  if (lastPage < totalPages) {
-    pages.push(
-      <button className="pagination-info" key="dots" disabled>
-        ...
-      </button>
-    );
-    pages.push(
-      <button className="pagination-info" key="last-page" disabled>
-        {totalPages}
-      </button>
-    );
-  }
-
-  if (totalPages > 0) {
-    pages.push(
-      <button
-        key="next"
-        onClick={() => handlePageClick(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        &gt;
-      </button>
+  // Si aucun utilisateur n'est choisi, on affiche la liste
+  if (selectedUser === null) {
+    return (
+      <div className="App">
+        <h1>Qui êtes-vous ?</h1>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              <button
+                onClick={() => {
+                  setSelectedUser(user);
+                  localStorage.setItem('selectedUser', JSON.stringify(user));
+                }}
+              >
+                {user.firstname} {user.lastname}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     );
   }
 
@@ -118,6 +97,10 @@ function Home() {
     <div className="App">
       <main className="Home-page">
         <h1>Filmorama</h1>
+        <p>
+          Connecté en tant que : {selectedUser.firstname}{' '}
+          {selectedUser.lastname}
+        </p>
         <div className="search-bar">
           <input
             value={movieName}
@@ -137,10 +120,15 @@ function Home() {
             </button>
           )}
         </div>
-
-        {moviesLoadingError && <p className="error-message">{moviesLoadingError}</p>}
+        {moviesLoadingError && (
+          <p className="error-message">{moviesLoadingError}</p>
+        )}
         <section className="movies-grid">{listItems}</section>
-        <div className="pagination">{pages}</div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={movies.totalPages || 0}
+          onPageClick={handlePageClick}
+        />
       </main>
     </div>
   );
