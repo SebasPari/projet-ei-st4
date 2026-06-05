@@ -1,0 +1,153 @@
+.movie-details-page {
+  margin: 0 auto;
+  max-width: 1040px;
+  padding: 28px 20px 48px;
+}
+
+.back-link {
+  color: #ff4d57;
+  display: inline-block;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.movie-details {
+  align-items: flex-start;
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+  color: #f5f5f5;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 260px 1fr;
+  padding: 24px;
+}
+
+.movie-details-poster {
+  border-radius: 8px;
+  width: 100%;
+}
+
+.movie-details-content {
+  text-align: left;
+}
+
+.movie-details-content h1 {
+  color: #ffffff;
+  font-size: 36px;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+
+.movie-details-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.movie-details-meta span {
+  background: #2a2a2a;
+  border-radius: 999px;
+  color: #e5e7eb;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 7px 10px;
+}
+
+.movie-details-content p {
+  color: #d1d5db;
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.rating-panel {
+  background: #101010;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  margin-top: 26px;
+  padding: 18px;
+}
+
+.rating-panel h3 {
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.rating-panel p {
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+
+.rating-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.rating-options button {
+  background: #181818;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  color: #f5f5f5;
+  cursor: pointer;
+  font-weight: 700;
+  min-width: 42px;
+  padding: 9px 11px;
+}
+
+.rating-options button:hover,
+.rating-options button.selected-rating {
+  background: #e50914;
+  border-color: #e50914;
+  color: #ffffff;
+}
+
+.rating-submit {
+  background: #e50914;
+  border: 1px solid #e50914;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 10px 14px;
+}
+
+.rating-message {
+  font-weight: 700;
+  margin-top: 12px !important;
+}
+
+.rating-message a {
+  color: #ff4d57;
+  margin-left: 6px;
+}
+
+.movie-details-message {
+  color: #f5f5f5;
+  font-size: 18px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .movie-details {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-details-poster {
+    max-width: 280px;
+  }
+
+  .movie-details-content h1 {
+    font-size: 30px;
+  }
+}

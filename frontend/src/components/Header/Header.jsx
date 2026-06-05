@@ -1,25 +1,29 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
+  const getLinkClassName = ({ isActive }) => {
+    if (isActive) {
+      return 'Header-link Header-link-active';
+    }
+
+    return 'Header-link';
+  };
+
   return (
-    <div className="Header-container">
-      <Link className="Link" to="/">
-        Home
-      </Link>
-      <div>|</div>
-      <Link className="Link" to="/counter">
-        Counter
-      </Link>
-      <div>|</div>
-      <Link className="Link" to="/users">
-        Users
-      </Link>
-      <div>|</div>
-      <Link className="Link" to="/about">
-        About
-      </Link>
-    </div>
+    <header className="Header-container">
+      <nav className="Header-nav" aria-label="Navigation principale">
+        <NavLink className={getLinkClassName} to="/">
+          Accueil
+        </NavLink>
+        <NavLink className={getLinkClassName} to="/recommendations">
+          Recommandations
+        </NavLink>
+        <NavLink className={getLinkClassName} to="/users">
+          Utilisateurs
+        </NavLink>
+      </nav>
+    </header>
   );
 };
 

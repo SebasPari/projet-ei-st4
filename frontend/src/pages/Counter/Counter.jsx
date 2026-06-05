@@ -6,9 +6,14 @@ function Counter() {
 
   return (
     <div className="Counter-container">
-      <h1>This is a counter example</h1>
-      <div>Counter value : {counter}</div>
-      <button onClick={() => setCounter(counter + 1)}>Increment counter</button>
+      <section className="Counter-panel">
+        <p className="Counter-label">Exemple React</p>
+        <h1>Compteur</h1>
+        <div className="Counter-value">{counter}</div>
+        <button className="Counter-button" onClick={() => setCounter(counter + 1)}>
+          Incrementer
+        </button>
+      </section>
     </div>
   );
 }
