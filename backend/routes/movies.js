@@ -1,4 +1,5 @@
 import express from 'express';
+import { ILike } from 'typeorm';
 import { appDataSource } from '../datasource.js';
 import Movie from '../entities/movies.js';
 
@@ -22,12 +23,15 @@ router.get('/', async (req, res) => {
   const sortColumn = sortColumns.includes(sort) ? sort : 'id';
   const sortOrder = order === 'DESC' ? 'DESC' : 'ASC';
 
+  const search = req.query.search || '';
+
   const [movies, totalMovies] = await movieRepository.findAndCount({
     skip: skip,
     take: limit,
     order: {
       [sortColumn]: sortOrder,
     },
+    where: search ? { title: ILike(`%${search}%`) } : {},
   });
 
   res.json({
@@ -54,6 +58,7 @@ router.get('/:id', (req, res) => {
 
   if (Number.isNaN(movieId)) {
     res.status(400).json({ message: 'Invalid movie id' });
+
     return;
   }
 
