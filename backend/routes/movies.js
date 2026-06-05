@@ -4,6 +4,7 @@ import Movie from '../entities/movies.js';
 
 const router = express.Router();
 
+// Route pour get les movies de la base de données pour les afficher dans la page d'acueil
 router.get('/', async (req, res) => {
   const movieRepository = appDataSource.getRepository(Movie);
   const page = Number(req.query.page) || 1;
@@ -11,7 +12,13 @@ router.get('/', async (req, res) => {
   const skip = (page - 1) * limit;
   const sort = req.query.sort || 'id';
   const order = req.query.order || 'ASC';
-  const sortColumns = ['id', 'title', 'release_date', 'vote_average', 'vote_count'];
+  const sortColumns = [
+    'id',
+    'title',
+    'release_date',
+    'vote_average',
+    'vote_count',
+  ];
   const sortColumn = sortColumns.includes(sort) ? sort : 'id';
   const sortOrder = order === 'DESC' ? 'DESC' : 'ASC';
 
@@ -31,6 +38,7 @@ router.get('/', async (req, res) => {
   });
 });
 
+// Route pour créer un nouveau film dans la base de données
 router.post('/new', function (req, res) {
   const movieRepository = appDataSource.getRepository(Movie);
   const newMovie = movieRepository.create({
@@ -40,6 +48,7 @@ router.post('/new', function (req, res) {
   movieRepository.insert(newMovie).then(console.log('New movie saved'));
 });
 
+// Route pour get un film selon son id
 router.get('/:id', (req, res) => {
   appDataSource
     .getRepository(Movie)
@@ -48,7 +57,7 @@ router.get('/:id', (req, res) => {
       if (movie == null) {
         res.status(404).json({ message: 'Movie not found' });
       } else {
-        res.status(200).json({ message: movie.title });
+        res.status(200).json({ movie: movie });
         console.log('movie found');
       }
     })
@@ -58,6 +67,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// Route pour enlever un film
 router.delete('/delete/:id', function (req, res) {
   appDataSource
     .getRepository(Movie)

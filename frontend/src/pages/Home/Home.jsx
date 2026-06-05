@@ -4,6 +4,7 @@ import './Home.css';
 import { useFetchMovies } from './useFetchMovies';
 import { Movie } from '../../components/Movie/Movie';
 import { Pagination } from '../../components/Pagination/Pagination';
+import { useFetchUsers } from '../Users/useFetchUsers';
 
 function Home() {
   const [movieName, setMovieName] = useState('');
@@ -11,6 +12,8 @@ function Home() {
   const [dateOrder, setDateOrder] = useState('recent');
   const [currentPage, setCurrentPage] = useState(1);
   const { movies, moviesLoadingError, fetchMovies } = useFetchMovies();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const { users } = useFetchUsers();
   function handleChange(e) {
     setMovieName(e.target.value);
   }
@@ -73,10 +76,39 @@ function Home() {
     <Movie key={movie.id} movie={movie}></Movie>
   ));
 
+  // Dans le cas ou l'utilisateur n'est pas connecté, il se connecte
+  if (selectedUser === null) {
+    return (
+      <div className="App">
+        <h1>Qui êtes-vous ?</h1>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>
+              <button
+                onClick={() => {
+                  setSelectedUser(user);
+                  localStorage.setItem('selectedUser', JSON.stringify(user));
+                  // Local storage permet de stocker les infos sur l'utilisateur pour ensuite les utiliser dans l'algo de recommedation
+                }}
+              >
+                {user.firstname} {user.lastname}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  // On montre des films à l'aceuil une fois que l'utilisateur est connectée
   return (
     <div className="App">
       <header className="App-header">
         <h1>Filmorama</h1>
+        <p>
+          Connecté en tant que : {selectedUser.firstname}{' '}
+          {selectedUser.lastname}
+        </p>
         <div className="search-bar">
           <input value={movieName} onChange={handleChange} />
           <select value={sortType} onChange={handleSortChange}>
