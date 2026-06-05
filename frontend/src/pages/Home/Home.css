@@ -2,36 +2,65 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Home-page {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 28px 20px 48px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.Home-page h1 {
+  color: #111827;
+  font-size: 42px;
+  margin: 10px 0 24px;
 }
 
 .search-bar {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 0 auto 28px;
+  max-width: 760px;
+  padding: 14px;
 }
 
 .search-bar input,
+.search-bar select,
+.search-bar button {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  min-height: 42px;
+  padding: 8px 12px;
+}
+
 .search-bar select {
-  padding: 8px;
-  font-size: 16px;
+  background: #ffffff;
+}
+
+.search-bar button {
+  background: #0f766e;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.movies-grid {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  margin: 0 auto;
+  width: 100%;
+}
+
+.error-message {
+  color: #b42318;
+  font-weight: 700;
 }
 
 .pagination {
@@ -43,24 +72,44 @@
 }
 
 .pagination button {
-  padding: 8px 12px;
-  font-size: 16px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #111827;
   cursor: pointer;
+  font-size: 16px;
+  padding: 8px 12px;
 }
 
-.pagination button:focus {
-  background-color: #61dafb;
+.pagination button:disabled:not(.pagination-info) {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #ffffff;
+  cursor: default;
 }
 
-.App-link {
-  color: #61dafb;
+.pagination button.pagination-info {
+  background: #ffffff;
+  color: #6b7280;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 640px) {
+  .Home-page {
+    padding: 20px 12px 36px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .Home-page h1 {
+    font-size: 34px;
+  }
+
+  .search-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-bar input,
+  .search-bar select,
+  .search-bar button {
+    width: 100%;
   }
 }

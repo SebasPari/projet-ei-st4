@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import './MovieDetails.css';
 
 function MovieDetails() {
   const { id } = useParams();
@@ -13,7 +14,6 @@ function MovieDetails() {
 
   useEffect(() => {
     setLoadingError(null);
-
     axios
       .get(`${import.meta.env.VITE_BACKEND_URL}/movies/${id}`)
       .then((response) => {
@@ -26,12 +26,13 @@ function MovieDetails() {
   }, [id]);
 
   if (loadingError) {
-    return <p>{loadingError}</p>;
+    return <p className="movie-details-message">{loadingError}</p>;
   }
 
   if (movie === null) {
-    return <p>Loading movie details...</p>;
+    return <p className="movie-details-message">Loading movie details...</p>;
   }
+
   if (selectedUser === null) {
     return (
       <p>
@@ -42,7 +43,6 @@ function MovieDetails() {
   }
 
   function handleRatingSubmit() {
-    // Cette fonction permet de mettre une note sur un film selon l'utilisateur connecté
     axios
       .post('http://localhost:8000/ratings/new', {
         userId: selectedUser.id,
@@ -58,39 +58,51 @@ function MovieDetails() {
   }
 
   return (
-    <main>
-      <h1>{movie.title}</h1>
+    <main className="movie-details-page">
+      <Link className="back-link" to="/">
+        Retour aux films
+      </Link>
 
-      {movie.poster_path && (
-        <img
-          src={`${baseURL}${movie.poster_path}`}
-          alt={movie.title}
-          width="200"
-        />
-      )}
+      <section className="movie-details">
+        {movie.poster_path && (
+          <img
+            className="movie-details-poster"
+            src={`${baseURL}${movie.poster_path}`}
+            alt={movie.title}
+          />
+        )}
 
-      <p>Release date: {movie.release_date}</p>
-      <p>Original language: {movie.original_language}</p>
-      <p>Average vote: {movie.vote_average}</p>
-      <p>Vote count: {movie.vote_count}</p>
-      <p>{movie.overview}</p>
-      <div>
-        <h3>Donner une note à ce film</h3>
-        <p>
-          Connecté en tant que : {selectedUser.firstname}{' '}
-          {selectedUser.lastname}
-        </p>
-        <input
-          type="number"
-          min="1"
-          max="10"
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-          placeholder="Note de 1 à 10"
-        />
-        <button onClick={handleRatingSubmit}>Envoyer</button>
-        {ratingMessage && <p>{ratingMessage}</p>}
-      </div>
+        <div className="movie-details-content">
+          <h1>{movie.title}</h1>
+          <div className="movie-details-meta">
+            <span>{movie.release_date || 'Date inconnue'}</span>
+            <span>{movie.original_language || 'Langue inconnue'}</span>
+            <span>
+              {movie.vote_average ? `${movie.vote_average}/10` : 'Non noté'}
+            </span>
+            <span>{movie.vote_count || 0} votes</span>
+          </div>
+          <p>{movie.overview || 'Aucun résumé disponible.'}</p>
+
+          <div>
+            <h3>Donner une note à ce film</h3>
+            <p>
+              Connecté en tant que : {selectedUser.firstname}{' '}
+              {selectedUser.lastname}
+            </p>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+              placeholder="Note de 1 à 10"
+            />
+            <button onClick={handleRatingSubmit}>Envoyer</button>
+            {ratingMessage && <p>{ratingMessage}</p>}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

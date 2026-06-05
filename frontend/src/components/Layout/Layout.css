@@ -1,11 +1,11 @@
 .Layout-container {
-  background-color: #282c34;
+  background: #f6f7f9;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  color: white;
+  color: #111827;
 }
 
 .Layout-content {
-  padding: 20px;
+  padding: 0;
 }

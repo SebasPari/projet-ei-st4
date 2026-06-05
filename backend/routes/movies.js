@@ -50,9 +50,16 @@ router.post('/new', function (req, res) {
 
 // Route pour get un film selon son id
 router.get('/:id', (req, res) => {
+  const movieId = Number(req.params.id);
+
+  if (Number.isNaN(movieId)) {
+    res.status(400).json({ message: 'Invalid movie id' });
+    return;
+  }
+
   appDataSource
     .getRepository(Movie)
-    .findOneBy({ id: req.params.id })
+    .findOneBy({ id: movieId })
     .then(function (movie) {
       if (movie == null) {
         res.status(404).json({ message: 'Movie not found' });

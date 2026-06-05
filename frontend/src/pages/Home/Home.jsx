@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import logo from './logo.svg';
 import './Home.css';
 import { useFetchMovies } from './useFetchMovies';
 import { Movie } from '../../components/Movie/Movie';
@@ -14,6 +13,7 @@ function Home() {
   const { movies, moviesLoadingError, fetchMovies } = useFetchMovies();
   const [selectedUser, setSelectedUser] = useState(null);
   const { users } = useFetchUsers();
+
   function handleChange(e) {
     setMovieName(e.target.value);
   }
@@ -26,7 +26,6 @@ function Home() {
 
       return 'DESC';
     }
-
     if (
       selectedSortType === 'vote_average' ||
       selectedSortType === 'vote_count'
@@ -41,7 +40,6 @@ function Home() {
     const newSortType = e.target.value;
     const sort = newSortType || 'id';
     const order = getSortOrder(newSortType, dateOrder);
-
     setSortType(newSortType);
     setCurrentPage(1);
     fetchMovies(1, sort, order);
@@ -49,11 +47,9 @@ function Home() {
 
   function handleDateOrderClick() {
     let newDateOrder = 'recent';
-
     if (dateOrder === 'recent') {
       newDateOrder = 'old';
     }
-
     setDateOrder(newDateOrder);
     setCurrentPage(1);
     fetchMovies(1, 'release_date', getSortOrder('release_date', newDateOrder));
@@ -62,7 +58,6 @@ function Home() {
   function handlePageClick(page) {
     const sort = sortType || 'id';
     const order = getSortOrder(sortType, dateOrder);
-
     setCurrentPage(page);
     fetchMovies(page, sort, order);
   }
@@ -71,12 +66,11 @@ function Home() {
     return film.title.toLowerCase().includes(movieName.toLowerCase());
   });
 
-  // On crée la liste des films à afficher
   const listItems = filteredMovies?.map((movie) => (
     <Movie key={movie.id} movie={movie}></Movie>
   ));
 
-  // Dans le cas ou l'utilisateur n'est pas connecté, il se connecte
+  // Si aucun utilisateur n'est choisi, on affiche la liste
   if (selectedUser === null) {
     return (
       <div className="App">
@@ -88,7 +82,6 @@ function Home() {
                 onClick={() => {
                   setSelectedUser(user);
                   localStorage.setItem('selectedUser', JSON.stringify(user));
-                  // Local storage permet de stocker les infos sur l'utilisateur pour ensuite les utiliser dans l'algo de recommedation
                 }}
               >
                 {user.firstname} {user.lastname}
@@ -100,17 +93,20 @@ function Home() {
     );
   }
 
-  // On montre des films à l'aceuil une fois que l'utilisateur est connectée
   return (
     <div className="App">
-      <header className="App-header">
+      <main className="Home-page">
         <h1>Filmorama</h1>
         <p>
           Connecté en tant que : {selectedUser.firstname}{' '}
           {selectedUser.lastname}
         </p>
         <div className="search-bar">
-          <input value={movieName} onChange={handleChange} />
+          <input
+            value={movieName}
+            onChange={handleChange}
+            placeholder="Rechercher un film"
+          />
           <select value={sortType} onChange={handleSortChange}>
             <option value="">Trier par</option>
             <option value="title">Titre</option>
@@ -124,27 +120,16 @@ function Home() {
             </button>
           )}
         </div>
-        <p>{movieName}</p>
-        {moviesLoadingError && <p>{moviesLoadingError}</p>}
-        {listItems}
+        {moviesLoadingError && (
+          <p className="error-message">{moviesLoadingError}</p>
+        )}
+        <section className="movies-grid">{listItems}</section>
         <Pagination
           currentPage={currentPage}
           totalPages={movies.totalPages || 0}
           onPageClick={handlePageClick}
         />
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://react.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </main>
     </div>
   );
 }

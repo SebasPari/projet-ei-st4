@@ -1,9 +1,12 @@
 .Header-container {
+  align-items: center;
+  background: #111827;
+  box-shadow: 0 4px 18px rgba(17, 24, 39, 0.16);
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 5px;
-  font-size: calc(10px + 2vmin);
+  padding: 14px;
+  font-size: 17px;
 }
 
 .Header-container > :not(:last-child) {
@@ -12,5 +15,10 @@
 
 .Link {
   font-weight: 700;
-  color: white;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.Link:hover {
+  color: #5eead4;
 }

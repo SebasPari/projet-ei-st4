@@ -1,26 +1,20 @@
 import { Link } from 'react-router-dom';
+import './Movie.css';
 
 export function Movie({ movie }) {
   const baseURL = 'https://image.tmdb.org/t/p/w500';
+  const posterURL = movie.poster_path
+    ? `${baseURL}${movie.poster_path}`
+    : '/vite.svg';
 
   return (
-    <div>
-      <Link to={`/movies/${movie.id}`}>
-        <table className="movie">
-          <tbody>
-            <tr key={movie?.id}>
-              <td>{movie?.title}</td>
-              <td> {movie?.release_date}</td>
-              <img
-                src={`${baseURL}${movie.poster_path}`}
-                alt={movie.name}
-                width="100"
-                height="150"
-              ></img>
-            </tr>
-          </tbody>
-        </table>
-      </Link>
-    </div>
+    <Link className="movie-card" to={`/movies/${movie.id}`}>
+      <img className="movie-poster" src={posterURL} alt={movie.title} />
+      <div className="movie-info">
+        <h2>{movie.title}</h2>
+        <p>{movie.release_date || 'Date inconnue'}</p>
+        <span>{movie.vote_average ? `${movie.vote_average}/10` : 'Non note'}</span>
+      </div>
+    </Link>
   );
 }
