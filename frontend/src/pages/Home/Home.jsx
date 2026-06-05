@@ -105,7 +105,7 @@ function Home() {
   return (
     <div className="App">
       <main className="Home-page">
-        <h1>Filmorama</h1>
+        <h1>MovieMatch</h1>
         <div className="home-user-panel">
           <p>
             Connecté en tant que : <strong>{selectedUser.firstname}{' '}

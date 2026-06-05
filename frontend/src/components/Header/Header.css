@@ -6,20 +6,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
-  justify-content: space-between;
+  justify-content: center;
   padding: 16px 32px;
   position: sticky;
   top: 0;
   z-index: 10;
-}
-
-.Header-brand {
-  color: #e50914;
-  font-size: 26px;
-  font-weight: 900;
-  letter-spacing: 0;
-  text-decoration: none;
-  text-transform: uppercase;
 }
 
 .Header-nav {
@@ -27,7 +18,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .Header-link {
@@ -48,11 +39,11 @@
 
 @media (max-width: 700px) {
   .Header-container {
-    align-items: flex-start;
+    align-items: center;
     padding: 14px 18px;
   }
 
   .Header-nav {
-    justify-content: flex-start;
+    justify-content: center;
   }
 }
