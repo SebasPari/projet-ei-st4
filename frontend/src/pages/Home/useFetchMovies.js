@@ -5,12 +5,14 @@ export function useFetchMovies() {
   const [movies, setMovies] = useState({});
   const [moviesLoadingError, setUsersLoadingError] = useState(null);
 
-  const fetchMovies = (page, sort, order) => {
+  const fetchMovies = (page, sort, order, search = '') => {
     setUsersLoadingError(null);
 
     axios
       .get(
-        `${import.meta.env.VITE_BACKEND_URL}/movies?page=${page}&limit=100&sort=${sort}&order=${order}`
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/movies?page=${page}&limit=100&sort=${sort}&order=${order}&search=${search}`
       )
       .then((response) => {
         setMovies(response.data);
